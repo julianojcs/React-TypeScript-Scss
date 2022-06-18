@@ -46,6 +46,10 @@ ul {
     > .icon {
       justify-self: flex-end;
       cursor: pointer;
+      color: #000000;
+      &:hover {
+        color: #c10000;
+      }
     }
   }
 }

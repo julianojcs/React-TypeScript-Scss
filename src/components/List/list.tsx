@@ -1,6 +1,8 @@
 import React from 'react'
 import './list.scss'
-const logo: string = require('../../assets/delete.svg').default
+import { DeleteIcon } from '../../assets'
+// const logo: string = require('../../assets/delete.svg').default
+
 export interface iPerson {
   person: {
     id: string
@@ -27,18 +29,21 @@ const Person: React.FC<iPerson> = ({ person, setPeople }) => {
       <h4>{person.name}</h4>
       <p>{`${person.age} years old`}</p>
       <p className='notes'>{person.note}</p>
-      <img
+      {/* <img
         onClick={() => handleDelete()}
         className='icon'
         src={logo}
         alt='logo'
+      /> */}
+      <DeleteIcon 
+        onClick={() => handleDelete()} 
+        className='icon'
       />
     </li>
   )
 }
 
-export const List: React.FC<iPeopleProps> = (props) => {
-  const { people } = props
+export const List: React.FC<iPeopleProps> = ({ people }) => {
   return (
     <>
       {people?.length > 0 ? (
@@ -59,8 +64,8 @@ export const List: React.FC<iPeopleProps> = (props) => {
 // export const People = ({ people }: iPeopleProps) => {
 // export const People: React.FC<iPeopleProps> = ({ people }) => {
 //   const renderPeople = (): JSX.Element[] => {
-//     return people.map((person) => <Person key={person.id} {...person} />)
+//     <Person key={person.id} person={person} setPeople={setPeople} />
 //   }
-// 
+//
 //   return <ul className='list'>{renderPeople()}</ul>
 // }
