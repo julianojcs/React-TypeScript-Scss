@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import './addToList.scss'
-import { iPeopleProps } from '../../components'
 import { v4 as uuidv4 } from 'uuid'
+import { iAddToListProps, iItem, iListProps } from '../../types'
 
-export interface iFormProps {
-  people: iPeopleProps['people']
-  // setPeople?: React.Dispatch<React.SetStateAction<iPerson[]>>
-  setPeople: React.Dispatch<React.SetStateAction<iPeopleProps['people']>>
-}
-
-export const AddToList: React.FC<iFormProps> = ({ people, setPeople }) => {
+export const AddToList: React.FC<iAddToListProps> = ({ setPeople }) => {
   const [disabled, setDisabled] = useState(false)
   const [cleared, setCleared] = useState({
     name: true,
@@ -41,18 +35,7 @@ export const AddToList: React.FC<iFormProps> = ({ people, setPeople }) => {
       })
   }
 
-  const handleAddToListClick = (): void => {
-    setPeople((prev) => [
-      ...prev,
-      {
-        person: {
-          ...input,
-          id: uuidv4(),
-          age: parseInt(input.age)
-        },
-        setPeople
-      }
-    ])
+  const clearForm = (): void => {
     setInput({
       name: '',
       age: '',
@@ -66,22 +49,33 @@ export const AddToList: React.FC<iFormProps> = ({ people, setPeople }) => {
     })
   }
 
-  const validateAge = (value: any) => {
-    if (value === '' || isNaN(value)) {
-      return false
+  const handleAddToListClick = (): void => {
+    let people: iItem[] | [] = []
+    const newPerson: iItem = {
+      person: {
+        ...input,
+        id: uuidv4(),
+        age: parseInt(input.age)
+      }
     }
-    if (parseInt(value) < 1) {
+    setPeople((prev) => {
+      people = [...prev, newPerson]
+      return people
+    })
+    localStorage.setItem('classmates', JSON.stringify(people))
+
+    clearForm()
+  }
+
+  const validateAge = (value: string): boolean => {
+    if (value === '' || value === '.' || value === ',' || value === 'e')
       return false
-    }
+    if (parseInt(value) < 1) return false
     return true
   }
 
   useEffect(() => {
-    setCleared({
-      name: true,
-      age: true,
-      img: true
-    })
+    clearForm()
   }, [])
 
   useEffect(() => {
